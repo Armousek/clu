@@ -1,6 +1,3 @@
-#include <iostream>
+#include "App.h"
 
-int main()
-{
-	return 0;
-}
+wxIMPLEMENT_APP(App);

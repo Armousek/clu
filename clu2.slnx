@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="clu2/clu2.vcxproj" />
+  <Project Path="clu2/clu2.vcxproj" Id="ef7a141a-d436-46d7-9462-343b34d43e27" />
 </Solution>
