@@ -81,33 +81,40 @@ namespace
 	bool TryExtractDdd(std::filesystem::path const& path, std::wregex const& pattern, std::wstring& ddd)
 	{
 		auto const stem = path.stem().wstring();
-		auto const lastUnderscore = stem.rfind(L'_');
+		auto const firstUnderscore = stem.find(L'_');
 
-		if (lastUnderscore == std::wstring::npos)
+		if (firstUnderscore == std::wstring::npos)
 		{
 			return false;
 		}
 
-		auto const previousUnderscore = stem.rfind(L'_', lastUnderscore - 1);
+		auto const suffixStart = stem.find_first_not_of(L'_', firstUnderscore + 1);
 
-		if (previousUnderscore == std::wstring::npos)
+		if (suffixStart == std::wstring::npos)
 		{
 			return false;
 		}
 
-		auto const suffix = stem.substr(lastUnderscore + 1);
+		auto const suffixSeparator = stem.find(L"____", suffixStart);
+
+		if (suffixSeparator == std::wstring::npos)
+		{
+			return false;
+		}
+
+		auto const suffix = stem.substr(suffixSeparator + 4);
 
 		if (!std::regex_search(suffix, pattern))
 		{
 			return false;
 		}
 
-		ddd = stem.substr(previousUnderscore + 1, lastUnderscore - previousUnderscore - 1);
+		ddd = stem.substr(0, firstUnderscore);
 
 		return !ddd.empty();
 	}
 
-	void AddMatchingImages(std::filesystem::path const& directory, std::wstring const& ddd, std::set<std::filesystem::path>& paths)
+	std::size_t AddMatchingFiles(std::filesystem::path const& directory, std::wstring const& ddd, std::set<std::filesystem::path>& paths)
 	{
 		std::error_code errorCode;
 		auto const before = paths.size();
@@ -129,21 +136,18 @@ namespace
 
 			auto const path = entry.path();
 
-			if (!IsImageFile(path))
-			{
-				continue;
-			}
-
-			if (path.stem().wstring().find(ddd) == std::wstring::npos)
+			if (path.filename().wstring().find(ddd) == std::wstring::npos)
 			{
 				continue;
 			}
 
 			paths.insert(path);
-			OdsLog(L"Matched image: " + path.wstring());
+			OdsLog(L"Matched file: " + path.wstring());
 		}
 
 		OdsLog(L"Parent folder matches added: " + std::to_wstring(paths.size() - before));
+
+		return paths.size() - before;
 	}
 }
 
@@ -250,6 +254,7 @@ void MainFrame::OnRunButtonClicked(wxCommandEvent&)
 	m_listControl->DeleteAllItems();
 
 	std::set<std::filesystem::path> paths;
+	std::vector<std::wstring> messages;
 
 	for (auto const& root : roots)
 	{
@@ -281,7 +286,12 @@ void MainFrame::OnRunButtonClicked(wxCommandEvent&)
 					if (TryExtractDdd(path, pattern, ddd))
 					{
 						OdsLog(L"DMC match: " + path.wstring() + L" DDD: " + ddd);
-						AddMatchingImages(dmcDirectory.parent_path(), ddd, paths);
+						auto const added = AddMatchingFiles(dmcDirectory.parent_path(), ddd, paths);
+
+						if (added == 0)
+						{
+							messages.emplace_back(L"No parent folder files found for " + ddd + L" from " + path.filename().wstring());
+						}
 					}
 				}
 			}
@@ -289,6 +299,12 @@ void MainFrame::OnRunButtonClicked(wxCommandEvent&)
 			errorCode.clear();
 			iterator.increment(errorCode);
 		}
+	}
+
+	for (auto const& message : messages)
+	{
+		auto const index = m_listControl->GetItemCount();
+		m_listControl->InsertItem(index, wxString(message));
 	}
 
 	for (auto const& path : paths)
