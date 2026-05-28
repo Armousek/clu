@@ -152,7 +152,7 @@ namespace
 }
 
 MainFrame::MainFrame()
-	: wxFrame(nullptr, wxID_ANY, "clu2", wxDefaultPosition, wxSize(800, 600))
+	: wxFrame(nullptr, wxID_ANY, "clu", wxDefaultPosition, wxSize(800, 600))
 {
 	SetBackgroundColour(*wxWHITE);
 
