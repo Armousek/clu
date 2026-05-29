@@ -206,8 +206,8 @@ void MainFrame::OnViewButtonClicked(wxCommandEvent&)
 {
 	OdsLog(L"View clicked");
 
-	auto* viewFrame = new ViewFrame();
-	viewFrame->Show(true);
+	auto* frame = new ViewFrame(m_foundPaths);
+	frame->Show(true);
 }
 
 void MainFrame::OnChooseButtonClicked(wxCommandEvent&)
@@ -318,6 +318,8 @@ void MainFrame::OnRunButtonClicked(wxCommandEvent&)
 		auto const index = m_listControl->GetItemCount();
 		m_listControl->InsertItem(index, wxString(message));
 	}
+
+	m_foundPaths.assign(paths.begin(), paths.end());
 
 	for (auto const& path : paths)
 	{

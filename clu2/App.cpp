@@ -4,6 +4,7 @@
 
 bool App::OnInit()
 {
+	wxInitAllImageHandlers();
 	auto* frame = new MainFrame();
 	frame->Show(true);
 

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Wx.h"
+#include <filesystem>
+#include <vector>
 
 class wxCommandEvent;
 
@@ -17,4 +19,5 @@ private:
 	wxTextCtrl* m_textControl = nullptr;
 	wxTextCtrl* m_secondTextControl = nullptr;
 	wxListCtrl* m_listControl = nullptr;
+	std::vector<std::filesystem::path> m_foundPaths;
 };
