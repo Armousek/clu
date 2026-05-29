@@ -168,6 +168,7 @@ MainFrame::MainFrame()
 
 	m_textControl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(-1, 72), wxTE_MULTILINE);
 	m_secondTextControl = new wxTextCtrl(this, wxID_ANY);
+	auto* viewButton = new wxButton(this, wxID_ANY, "View");
 	auto* chooseButton = new wxButton(this, wxID_ANY, "Choose");
 	auto* runButton = new wxButton(this, wxID_ANY, "Run");
 	m_textControl->SetBackgroundColour(*wxWHITE);
@@ -176,6 +177,7 @@ MainFrame::MainFrame()
 	runButton->SetBackgroundColour(*wxWHITE);
 
 	buttonSizer->AddStretchSpacer();
+	buttonSizer->Add(viewButton, 0, wxRIGHT, 8);
 	buttonSizer->Add(chooseButton, 0, wxRIGHT, 8);
 	buttonSizer->Add(runButton, 0);
 

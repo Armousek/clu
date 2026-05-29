@@ -12,8 +12,10 @@ public:
 private:
 	void OnChooseButtonClicked(wxCommandEvent& event);
 	void OnRunButtonClicked(wxCommandEvent& event);
+	void OnPictureButtonClicked(wxCommandEvent& event);
 
 	wxTextCtrl* m_textControl = nullptr;
 	wxTextCtrl* m_secondTextControl = nullptr;
 	wxListCtrl* m_listControl = nullptr;
+	wxImageList* m_imageList = nullptr;
 };
