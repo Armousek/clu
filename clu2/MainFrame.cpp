@@ -1,4 +1,5 @@
 #include "MainFrame.h"
+#include "ViewFrame.h"
 
 #include <algorithm>
 #include <cwctype>
@@ -192,12 +193,21 @@ MainFrame::MainFrame()
 	mainSizer->Add(groupSizer, 0, wxEXPAND | wxALL, 8);
 	mainSizer->Add(m_listControl, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 8);
 
+	viewButton->Bind(wxEVT_BUTTON, &MainFrame::OnViewButtonClicked, this);
 	chooseButton->Bind(wxEVT_BUTTON, &MainFrame::OnChooseButtonClicked, this);
 	runButton->Bind(wxEVT_BUTTON, &MainFrame::OnRunButtonClicked, this);
 	Bind(wxEVT_MENU, &MainFrame::OnChooseButtonClicked, this, wxID_OPEN);
 
 	SetSizer(mainSizer);
 	Centre();
+}
+
+void MainFrame::OnViewButtonClicked(wxCommandEvent&)
+{
+	OdsLog(L"View clicked");
+
+	auto* viewFrame = new ViewFrame();
+	viewFrame->Show(true);
 }
 
 void MainFrame::OnChooseButtonClicked(wxCommandEvent&)

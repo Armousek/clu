@@ -164,8 +164,10 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="ViewFrame.cpp" />
     <ClInclude Include="App.h" />
     <ClInclude Include="MainFrame.h" />
+    <ClInclude Include="ViewFrame.h" />
     <ClInclude Include="Wx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
